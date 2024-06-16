@@ -1,16 +1,13 @@
 package com.example.demo.service;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("bassGuitarImpl")
 public class BassGuitarImpl implements GuitarService{
-    @Override
-    public String getGuitarName(String name){
-        return "This is " + name + "!";
-    }
 
     @Override
-    public String getGuitarType(String type){
-        return "This is " + type + " Bass guitar";
+    public String getGuitarInfo(){
+        return "This is  Bass guitar";
     }
 }

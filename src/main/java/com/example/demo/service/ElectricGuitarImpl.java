@@ -2,15 +2,11 @@ package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
 
-@Service
-public class ElectricGuitarImpl implements GuitarService{
-    @Override
-    public String getGuitarName(String name){
-        return "This is " + name + "!";
-    }
+@Service("electricGuitarImpl")
+public class ElectricGuitarImpl implements GuitarService {
 
-    @Override
-    public String getGuitarType(String type){
-        return "This is " + type + " Electrical guitar";
-    }
+	@Override
+	public String getGuitarInfo() {
+		return "This is  Electrical guitar";
+	}
 }

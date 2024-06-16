@@ -1,51 +1,51 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.GuitarDto;
-import com.example.demo.service.BassGuitarImpl;
-import com.example.demo.service.ElectricGuitarImpl;
-import com.example.demo.service.RockStarGuitarImpl;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.naming.InvalidNameException;
+import com.example.demo.dto.GuitarDto;
+import com.example.demo.service.GuitarService;
+import com.example.demo.service.GuitarServiceSelector;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
 @RequestMapping("/guitar")
 public class GuitarController {
+	// private final RockStarGuitarImpl rockStarGuitar;
+	// private final ElectricGuitarImpl electricGuitar;
+	// private final BassGuitarImpl bassGuitar;
+	// GuitarController(RockStarGuitarImpl rockStarGuitar, ElectricGuitarImpl
+	// electricGuitar, BassGuitarImpl bassGuitar) {
+	// this.rockStarGuitar = rockStarGuitar;
+	// this.electricGuitar = electricGuitar;
+	// this.bassGuitar = bassGuitar;
+	// }
 
-    // injecting bean
-//    private final RockStarGuitarImpl rockStarGuitarImpl;
-//    private final BassGuitarImpl bassGuitarImpl;
-    private final ElectricGuitarImpl electricGuitarImpl;
+	private final GuitarServiceSelector guitarServiceSelector;
 
-    GuitarController(ElectricGuitarImpl electricGuitarImpl){
-        this.electricGuitarImpl = electricGuitarImpl;
-    }
-//    GuitarController(RockStarGuitarImpl rockStarGuitarImpl, BassGuitarImpl bassGuitarImpl, ElectricGuitarImpl electricGuitarImpl){
-//        this.rockStarGuitarImpl = rockStarGuitarImpl;
-//        this.bassGuitarImpl = bassGuitarImpl;
-//        this.electricGuitarImpl = electricGuitarImpl;
-//    }
+	public GuitarController(GuitarServiceSelector guitarServiceSelector) {
+		this.guitarServiceSelector = guitarServiceSelector;
+	}
 
+	@GetMapping("/get")
+	public ResponseEntity<String> getGuitars(@RequestBody @Valid GuitarDto guitarDto) {
+		log.info("Entered into Guitar Controller :: getGuitars method");
+		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+		// switch (guitarDto.getGuitarType()) {
+		// case ELECTRIC -> guitarService = electricGuitar;
+		// case ROCKSTAR -> guitarService = rockStarGuitar;
+		// default -> guitarService = bassGuitar;
+		// }
 
-
-//    @PostMapping("/addGuitar")
-//    public ResponseEntity<String> addGuitars(@RequestBody GuitarDto guitarDto) throws InvalidNameException {
-//        log.info("Entered into Guitar Controller :: addGuitars method");
-//        return new ResponseEntity<>(GuitarService.getRockStarGuitar(guitarDto.getName()), HttpStatus.OK);
-//    }
-
-    @GetMapping("/getGuitar")
-    public ResponseEntity<String> addGuitars(@RequestBody GuitarDto guitarDto) throws InvalidNameException {
-        log.info("Entered into Guitar Controller :: getGuitars method");
-//        return new ResponseEntity<>(guitarServiceImpl.getGuitarName(guitarDto.getName()), HttpStatus.OK);
-        return new ResponseEntity<>(electricGuitarImpl.getGuitarType(guitarDto.getType()), HttpStatus.OK);
-    }
-
-
-
+		return new ResponseEntity<>(guitarService.getGuitarInfo(), HttpStatus.OK);
+	}
 
 }
