@@ -1,10 +1,9 @@
 package com.example.demo.dto;
 
-import javax.validation.constraints.NotNull;
-
 import com.example.demo.enums.GuitarType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
