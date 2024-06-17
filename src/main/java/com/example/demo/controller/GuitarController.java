@@ -4,10 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.GuitarDto;
 import com.example.demo.service.GuitarService;
@@ -44,8 +41,28 @@ public class GuitarController {
 		// case ROCKSTAR -> guitarService = rockStarGuitar;
 		// default -> guitarService = bassGuitar;
 		// }
-
 		return new ResponseEntity<>(guitarService.getGuitarInfo(), HttpStatus.OK);
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<String> addGuitars(@RequestBody @Valid GuitarDto guitarDto){
+		log.info("Entered into Guitar Controller :: addGuitars method");
+		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+		return new ResponseEntity<>(guitarService.addGuitarInfo(), HttpStatus.OK);
+	}
+
+	@PutMapping("/update")
+	public ResponseEntity<String> updateGuitars(@RequestBody @Valid GuitarDto guitarDto){
+		log.info("Entered into Guitar Controller :: updateGuitars method");
+		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+		return new ResponseEntity<>(guitarService.updateGuitarInfo(), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/delete")
+	public ResponseEntity<String> deleteGuitars(@RequestBody @Valid GuitarDto guitarDto){
+		log.info("Entered into Guitar Controller :: deleteGuitars method");
+		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+		return new ResponseEntity<>(guitarService.deleteGuitarInfo(), HttpStatus.OK);
 	}
 
 }
