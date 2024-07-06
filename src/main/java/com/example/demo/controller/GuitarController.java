@@ -12,7 +12,9 @@ import com.example.demo.service.GuitarServiceSelector;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -33,39 +35,75 @@ public class GuitarController {
 	public GuitarController(GuitarServiceSelector guitarServiceSelector) {
 		this.guitarServiceSelector = guitarServiceSelector;
 	}
-	
-	@GetMapping("/get")
-	public ResponseEntity<String> getGuitars(@RequestBody @Valid GuitarDto guitarDto) {
+
+	@GetMapping("/getAll")
+	public ResponseEntity<List<GuitarDto>> getAllGuitars(@RequestBody @Valid GuitarDto guitarDto) {
 		log.info("Entered into Guitar Controller :: getGuitars method");
 		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
-		// switch (guitarDto.getGuitarType()) {
-		// case ELECTRIC -> guitarService = electricGuitar;
-		// case ROCKSTAR -> guitarService = rockStarGuitar;
-		// default -> guitarService = bassGuitar;
-		// }
 		return new ResponseEntity<>(guitarService.getGuitarInfo(), HttpStatus.OK);
 	}
 
-	@PostMapping("/add")
-	public ResponseEntity<String> addGuitars(@RequestBody @Valid GuitarDto guitarDto){
+	@GetMapping("/getById")
+	public ResponseEntity<Optional<GuitarDto>> getGuitarById(@RequestBody @Valid GuitarDto guitarDto){
+		log.info("Entered into Guitar Controller :: getByIdGuitars method");
+		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+		return new ResponseEntity<>(guitarService.getGuitarById(guitarDto.getName()), HttpStatus.OK);
+	}
+
+	@PostMapping("/test")
+	public ResponseEntity<GuitarDto> createGuitar(@RequestBody @Valid GuitarDto guitarDto){
 		log.info("Entered into Guitar Controller :: addGuitars method");
 		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
-		return new ResponseEntity<>(guitarService.addGuitarInfo(), HttpStatus.OK);
+		return new ResponseEntity<>(guitarService.saveGuitar(guitarDto), HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<String> updateGuitars(@RequestBody @Valid GuitarDto guitarDto){
-		log.info("Entered into Guitar Controller :: updateGuitars method");
+	public ResponseEntity<GuitarDto> updateGuitar(@RequestBody @Valid GuitarDto guitarDto){
+		log.info("Entered into Guitar Controller :: addGuitars method");
 		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
-		return new ResponseEntity<>(guitarService.updateGuitarInfo(), HttpStatus.OK);
+		return new ResponseEntity<>(guitarService.updateGuitar(guitarDto.getName(),guitarDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteGuitars(@RequestBody @Valid GuitarDto guitarDto){
+	public void deleteGuitar(@RequestBody @Valid GuitarDto guitarDto){
 		log.info("Entered into Guitar Controller :: deleteGuitars method");
 		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
-		return new ResponseEntity<>(guitarService.deleteGuitarInfo(), HttpStatus.OK);
+		guitarService.deleteGuitar(guitarDto.getName());
 	}
+
+
+//	@GetMapping("/get")
+//	public ResponseEntity<String> getGuitars(@RequestBody @Valid GuitarDto guitarDto) {
+//		log.info("Entered into Guitar Controller :: getGuitars method");
+//		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+//		// switch (guitarDto.getGuitarType()) {
+//		// case ELECTRIC -> guitarService = electricGuitar;
+//		// case ROCKSTAR -> guitarService = rockStarGuitar;
+//		// default -> guitarService = bassGuitar;
+//		// }
+//		return new ResponseEntity<>(guitarService.getGuitarInfo(), HttpStatus.OK);
+//	}
+//
+//	@PostMapping("/add")
+//	public ResponseEntity<String> addGuitars(@RequestBody @Valid GuitarDto guitarDto){
+//		log.info("Entered into Guitar Controller :: addGuitars method");
+//		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+//		return new ResponseEntity<>(guitarService.addGuitarInfo(), HttpStatus.OK);
+//	}
+//
+//	@PutMapping("/update")
+//	public ResponseEntity<String> updateGuitars(@RequestBody @Valid GuitarDto guitarDto){
+//		log.info("Entered into Guitar Controller :: updateGuitars method");
+//		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+//		return new ResponseEntity<>(guitarService.updateGuitarInfo(), HttpStatus.OK);
+//	}
+//
+//	@DeleteMapping("/delete")
+//	public ResponseEntity<String> deleteGuitars(@RequestBody @Valid GuitarDto guitarDto){
+//		log.info("Entered into Guitar Controller :: deleteGuitars method");
+//		GuitarService guitarService = guitarServiceSelector.selectService(guitarDto.getGuitarType());
+//		return new ResponseEntity<>(guitarService.deleteGuitarInfo(), HttpStatus.OK);
+//	}
 
 
 }
