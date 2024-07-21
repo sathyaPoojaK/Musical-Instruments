@@ -1,0 +1,28 @@
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  health:
+    redis:
+      enabled: false
+    mongo:
+      enabled: false
+  endpoints:
+    web:
+      base-path: "/management"
+      exposure:
+        include: "info,health,prometheus,metrics"
+  metrics:
+    tags:
+      application: "musicalInstrument"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+spring:
+  application:
+    name: musicalInstrument
